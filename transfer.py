@@ -24,6 +24,8 @@ def parse_args():
                         help='Image resolution')
     parser.add_argument("--output_path", type=str, default="./outputs/",
                         help="Result storage")
+    parser.add_argument("--source", type=str, default="a Photo",
+                        help="source in template")
 
     parser.add_argument('--lambda_tv', type=float, default=2e-3,
                         help='total variation loss parameter')
@@ -124,37 +126,31 @@ def compose_text_with_templates(text: str, templates=imagenet_templates) -> list
 
 
 def train():
+    # Initialize basic
     args = parse_args()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
     assert (args.img_width % 8) == 0, "width must be multiple of 8"
     assert (args.img_height % 8) == 0, "height must be multiple of 8"
-    
+    # Initialize model
     VGG = models.vgg19(pretrained=True).features
     VGG.to(device)
+    style_net = UNet()
+    style_net.to(device)
     # Freeze the network weights and do not update  while training
     for parameter in VGG.parameters():
         parameter.requires_grad_(False)
 
-    # preprocess before trainning
+    # Preprocess before trainning
     content_image = load_image(args.content_path, img_height=args.img_height, img_width=args.img_width)
-    exp = args.exp_name
-
     content_image = content_image.to(device)
     content_features = get_features(img_normalize(content_image, device), VGG)
     target = content_image.clone().requires_grad_(True).to(device)
-
-    # 风格网络使用UNet
-    style_net = UNet()
-    style_net.to(device)
 
     style_weights = {'conv1_1': 0.1,
                     'conv2_1': 0.2,
                     'conv3_1': 0.4,
                     'conv4_1': 0.8,
                     'conv5_1': 1.6}
-
-    content_weight = args.lambda_c
 
     optimizer = optim.Adam(style_net.parameters(), lr=args.lr)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=100, gamma=0.5)
@@ -245,7 +241,7 @@ def train():
 
         reg_tv = args.lambda_tv * get_image_prior_losses(target)
 
-        total_loss = args.lambda_patch * loss_patch + content_weight * content_loss + reg_tv + args.lambda_dir * loss_glob
+        total_loss = args.lambda_patch * loss_patch + args.lambda_c * content_loss + reg_tv + args.lambda_dir * loss_glob
         total_loss_epoch.append(total_loss)
         # loss计算完毕后，把loss关于梯度的导数置零，即梯度置零
         optimizer.zero_grad()
