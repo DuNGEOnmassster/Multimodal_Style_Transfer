@@ -10,8 +10,8 @@ from PIL import Image
 from torchvision.transforms import Compose, Resize, CenterCrop, ToTensor, Normalize
 from tqdm import tqdm
 
-from MODELS import build_model, convert_weights
-from simple_tokenizer import SimpleTokenizer as _Tokenizer
+from utils.MODELS import build_model
+from utils.simple_tokenizer import SimpleTokenizer as _Tokenizer
 
 try:
     from torchvision.transforms import InterpolationMode

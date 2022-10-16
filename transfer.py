@@ -9,9 +9,9 @@ from torchvision.transforms.functional import adjust_contrast
 from PIL import Image
 import argparse
 
-from template import imagenet_templates
-import CLIP
-from MODELS import UNet
+from utils.template import imagenet_templates
+import utils.CLIP as CLIP
+from utils.MODELS import UNet
 
 def parse_args():
     parser = argparse.ArgumentParser()
