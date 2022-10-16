@@ -25,10 +25,10 @@ pip install -r requirement.txt
 python transfer.py
 ```
 
-And here are examples for what it would look like if you use `Fire` as text description.
+And here are examples for what it would look like if you use `Van_Gogh_Horus` as text description.
 
 Content          |  Target
 :-------------------------:|:-------------------------:
-![](./data/face2.jpeg)  |  ![](./outputs/Fire_face2_exp3.jpg)
+![](./data/face2.jpeg)  |  ![](./outputs/Van_Gogh_Horus_face2_exp1.jpg)
 
 Hopefully you will like it.
