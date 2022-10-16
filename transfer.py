@@ -126,41 +126,33 @@ def compose_text_with_templates(text: str, templates=imagenet_templates) -> list
 
 
 def train():
-    # Initialize basic
-    args = parse_args()
+    # Initialize device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    assert (args.img_width % 8) == 0, "width must be multiple of 8"
-    assert (args.img_height % 8) == 0, "height must be multiple of 8"
+
     # Initialize model
     VGG = models.vgg19(pretrained=True).features
     VGG.to(device)
     style_net = UNet()
     style_net.to(device)
+    clip_model, _ = CLIP.load('ViT-B/32', device, jit=False)
+
     # Freeze the network weights and do not update  while training
     for parameter in VGG.parameters():
         parameter.requires_grad_(False)
 
-    # Preprocess before trainning
-    content_image = load_image(args.content_path, img_height=args.img_height, img_width=args.img_width)
-    content_image = content_image.to(device)
+    # Initialize basic
+    args = parse_args()
+    assert (args.img_width % 8) == 0, "width must be multiple of 8"
+    assert (args.img_height % 8) == 0, "height must be multiple of 8"
+    content_image = load_image(args.content_path, img_height=args.img_height, img_width=args.img_width).to(device)
     content_features = get_features(img_normalize(content_image, device), VGG)
     target = content_image.clone().requires_grad_(True).to(device)
+    output_image = content_image
+    total_loss_epoch = []
 
-    style_weights = {'conv1_1': 0.1,
-                    'conv2_1': 0.2,
-                    'conv3_1': 0.4,
-                    'conv4_1': 0.8,
-                    'conv5_1': 1.6}
-
+    # Initialize tricks
     optimizer = optim.Adam(style_net.parameters(), lr=args.lr)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=100, gamma=0.5)
-    steps = args.max_step
-
-    content_loss_epoch = []
-    style_loss_epoch = []
-    total_loss_epoch = []
-    # 用内容图片来初始化目标图片
-    output_image = content_image
 
     cropper = transforms.Compose([
         transforms.RandomCrop(args.crop_size)
@@ -169,9 +161,6 @@ def train():
         transforms.RandomPerspective(fill=0, p=1, distortion_scale=0.5),
         transforms.Resize(224)
     ])
-    
-    # 调用ViT-B/32模型
-    clip_model, preprocess = CLIP.load('ViT-B/32', device, jit=False)
 
     with torch.no_grad():
         template_text = compose_text_with_templates(args.text, imagenet_templates)
@@ -188,35 +177,29 @@ def train():
         source_features = clip_model.encode_image(clip_normalize(content_image, device))
         source_features /= (source_features.clone().norm(dim=-1, keepdim=True))
 
-    num_crops = args.num_crops
-    for epoch in range(0, steps + 1):
-
-        scheduler.step()
+    for epoch in range(0, args.max_step + 1):
+        content_loss = 0
         target = style_net(content_image, use_sigmoid=True).to(device)
         target.requires_grad_(True)
-
         target_features = get_features(img_normalize(target, device), VGG)
-
-        # 初始化内容损失
-        content_loss = 0
-        # 按李沐AI，内容损失使用平方误差函数计算
-        content_loss += torch.mean((target_features['conv4_2'] - content_features['conv4_2']) ** 2)
-        content_loss += torch.mean((target_features['conv5_2'] - content_features['conv5_2']) ** 2)
 
         loss_patch = 0
         img_proc = []
-        for n in range(num_crops):
+        for n in range(args.num_crops):
             target_crop = cropper(target)
             target_crop = augment(target_crop)
             img_proc.append(target_crop)
 
         img_proc = torch.cat(img_proc, dim=0)
         img_aug = img_proc
-        # 报错 RuntimeError: CUDA out of memory. 增加empty_cache()函数及时释放cache解放gpu
+
         if hasattr(torch.cuda, 'empty_cache'):
             torch.cuda.empty_cache()
 
-        # 开始loss计算
+        # Start computing loss
+        content_loss += torch.mean((target_features['conv4_2'] - content_features['conv4_2']) ** 2)
+        content_loss += torch.mean((target_features['conv5_2'] - content_features['conv5_2']) ** 2)
+
         image_features = clip_model.encode_image(clip_normalize(img_aug, device))
         image_features /= (image_features.clone().norm(dim=-1, keepdim=True))
 
@@ -241,13 +224,12 @@ def train():
 
         total_loss = args.lambda_patch * loss_patch + args.lambda_c * content_loss + reg_tv + args.lambda_dir * loss_glob
         total_loss_epoch.append(total_loss)
-        # loss计算完毕后，把loss关于梯度的导数置零，即梯度置零
         optimizer.zero_grad()
         total_loss.backward()
         optimizer.step()
+        scheduler.step()
         
-
-        # 每20个epoch统计一次loss
+        # count loss in every 20 epoches
         if epoch % 20 == 0:
             print("After %d criterions:" % epoch)
             print('Total loss: ', total_loss.item())
@@ -256,7 +238,7 @@ def train():
             print('dir loss: ', loss_glob.item())
             print('TV loss: ', reg_tv.item())
 
-        # 每50个epoch更新一次目标图片
+        # update target output in every 50 epoches
         if epoch % 50 == 0:
             out_path = args.output_path + args.text + '_' + args.content_path.split("/")[-1].split(".")[0] + '_' + args.exp_name + '.jpg'
             output_image = target.clone()
