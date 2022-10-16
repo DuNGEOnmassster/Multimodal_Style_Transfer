@@ -173,8 +173,6 @@ def train():
     # 调用ViT-B/32模型
     clip_model, preprocess = CLIP.load('ViT-B/32', device, jit=False)
 
-    source = "a Photo"
-
     with torch.no_grad():
         template_text = compose_text_with_templates(args.text, imagenet_templates)
         tokens = CLIP.tokenize(template_text).to(device)
@@ -182,7 +180,7 @@ def train():
         text_features = text_features.mean(axis=0, keepdim=True)
         text_features /= text_features.norm(dim=-1, keepdim=True)
 
-        template_source = compose_text_with_templates(source, imagenet_templates)
+        template_source = compose_text_with_templates(args.source, imagenet_templates)
         tokens_source = CLIP.tokenize(template_source).to(device)
         text_source = clip_model.encode_text(tokens_source).detach()
         text_source = text_source.mean(axis=0, keepdim=True)
