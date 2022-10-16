@@ -29,6 +29,6 @@ And here are examples for what it would look like if you use `Fire` as text desc
 
 Content          |  Target
 :-------------------------:|:-------------------------:
-![](./data/face2.jpeg)  |  ![](./outputs/Fire_face2_exp2.jpg)
+![](./data/face2.jpeg)  |  ![](./outputs/Fire_face2_exp3.jpg)
 
 Hopefully you will like it.
