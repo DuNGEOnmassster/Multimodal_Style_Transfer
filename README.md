@@ -22,6 +22,12 @@ pip install -r requirement.txt
 #### Run StyleTransfer with
 
 ```shell script
+python transfer.py --content_path <content_img_file_path> --text <style_description> --output_path <target_img_storage_path> --exp_name <exp_name>
+```
+
+#### Of course you can just simply start and adjust parameters in code
+
+```
 python transfer.py
 ```
 
