@@ -6,12 +6,18 @@ Image Style Transfer with style comes from text description(CPU friendly).
 #### You are recommended to create a virtual envirnment with conda
 
 ```shell script
+conda create --name StyleTransfer --file requirement.txt
+```
+
+##### If failed, You can also setup virtual envirnment step by step
+
+```shell script
 conda create -n StyleTransfer python=3.10
 
 conda activate StyleTransfer
 ```
 
-#### Then download the necessary Python packages through
+##### Then download the necessary Python packages through
 
 ```shell script
 pip install -r requirement.txt
