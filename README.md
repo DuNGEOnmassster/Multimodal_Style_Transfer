@@ -51,5 +51,5 @@ Hopefully you will like it.
 
 |   Content     |   Crazy diamond   |   Golden experience   |   Star Platinum   |
 |---------------|-------------------|-----------------------|-------------------|
-![](./data/head.jpg =100)|![](./outputs/JOJO_special/Crazy_diamond_head_exp1.jpg =100)｜![](./outputs/JOJO_special/Golden_experience_head_exp1.jpg =100)|![](./outputs/JOJO_special/Star_Platinum_head_exp1.jpg =100)
+![](./data/head.jpg =100*100)|![](./outputs/JOJO_special/Crazy_diamond_head_exp1.jpg =100*100)｜![](./outputs/JOJO_special/Golden_experience_head_exp1.jpg =100*100)|![](./outputs/JOJO_special/Star_Platinum_head_exp1.jpg =100*100)
 
