@@ -49,11 +49,18 @@ Hopefully you will like it.
 
 ## Have some fun
 
-### For example
-
 #### After obtaining the authorization from 'victim', we generated the following image with alias from JOJO.
 
 |   Content     |   Crazy diamond   |   Golden experience   |   Star Platinum   |
 :---------------:|:-------------------:|:-----------------------:|:-------------------:
 <img src="./data/head.jpg" width = "180" height = "180"/>   |   <img src="./outputs/JOJO_special/Crazy_diamond_head_exp1.jpg" width = "180" height = "180"/>    |   <img src="./outputs/JOJO_special/Golden_experience_head_exp1.jpg" width = "180" height = "180"/>    |   <img src="./outputs/JOJO_special/Star_Platinum_head_exp1.jpg" width = "180" height = "180"/>
 
+## Reference
+
+[Gatys et al., 2016 Gatys, L. A., Ecker, A. S., & Bethge, M. (2016). Image style transfer using convolutional neural networks. Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 2414–2423).](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf)
+
+[DIVE INTO DEEP LEARNING](https://d2l.ai/chapter_computer-vision/neural-style.html)
+
+[CLIPstyler: Image Style Transfer with a Single Text Condition](https://arxiv.org/abs/2112.00374)
+
+[StyleCLIP: Text-Driven Manipulation of StyleGAN Imagery](https://arxiv.org/abs/2103.17249)
