@@ -229,26 +229,16 @@ def train():
         optimizer.step()
         scheduler.step()
         
-        # count loss in every 20 epoches
-        if epoch % 20 == 0:
-            print("After %d criterions:" % epoch)
-            print('Total loss: ', total_loss.item())
-            print('Content loss: ', content_loss.item())
-            print('patch loss: ', loss_patch.item())
-            print('dir loss: ', loss_glob.item())
-            print('TV loss: ', reg_tv.item())
+        # print loss in every 10 epoches
+        if epoch % 10 == 0:
+            print(f"epoch:{epoch}\tTotal loss: {total_loss.item()}\nContent loss: {loss_patch.item()}, Patch loss: {loss_patch.item()}\nDir loss:{loss_glob.item()}, TV loss: {reg_tv.item()}")
 
         # update target output in every 50 epoches
         if epoch % 50 == 0:
             out_path = args.output_path + args.text + '_' + args.content_path.split("/")[-1].split(".")[0] + '_' + args.exp_name + '.jpg'
-            output_image = target.clone()
-            output_image = torch.clamp(output_image, 0, 1)
+            output_image = torch.clamp(target.clone(), 0, 1)
             output_image = adjust_contrast(output_image, 1.5)
-            vutils.save_image(
-                output_image,
-                out_path,
-                nrow=1,
-                normalize=True)
+            vutils.save_image(output_image, out_path, nrow=1, normalize=True)
 
 
 if __name__ == "__main__":
