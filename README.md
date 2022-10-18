@@ -50,6 +50,6 @@ Hopefully you will like it.
 #### After obtaining the authorization from 'victim', we generated the following image with alias from JOJO.
 
 |   Content     |   Crazy diamond   |   Golden experience   |   Star Platinum   |
-|---------------|-------------------|-----------------------|-------------------|
-![](./data/head.jpg){:height="100px" width="100px"}|![](./outputs/JOJO_special/Crazy_diamond_head_exp1.jpg){:height="100px" width="100px"}|![](./outputs/JOJO_special/Golden_experience_head_exp1.jpg){:height="100px" width="100px"}|![](./outputs/JOJO_special/Star_Platinum_head_exp1.jpg){:height="100px" width="100px"}
+:---------------:|:-------------------:|:-----------------------:|:-------------------:
+![](./data/head.jpg){:height="100px" width="100px"}
 
