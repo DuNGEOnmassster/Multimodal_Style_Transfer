@@ -45,11 +45,15 @@ Content          |  Target
 
 Hopefully you will like it.
 
+
+
 ## Have some fun
+
+### For example
 
 #### After obtaining the authorization from 'victim', we generated the following image with alias from JOJO.
 
 |   Content     |   Crazy diamond   |   Golden experience   |   Star Platinum   |
 :---------------:|:-------------------:|:-----------------------:|:-------------------:
-<img src="./data/head.jpg" width = "150" height = "150"/>   |   <img src="./outputs/JOJO_special/Crazy_diamond_head_exp1.jpg" width = "150" height = "150"/>    |   <img src="./outputs/JOJO_special/Golden_experience_head_exp1.jpg" width = "150" height = "150"/>    |   <img src="./outputs/JOJO_special/Star_Platinum_head_exp1.jpg" width = "150" height = "150"/>
+<img src="./data/head.jpg" width = "180" height = "180"/>   |   <img src="./outputs/JOJO_special/Crazy_diamond_head_exp1.jpg" width = "180" height = "180"/>    |   <img src="./outputs/JOJO_special/Golden_experience_head_exp1.jpg" width = "180" height = "180"/>    |   <img src="./outputs/JOJO_special/Star_Platinum_head_exp1.jpg" width = "180" height = "180"/>
 
