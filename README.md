@@ -41,6 +41,14 @@ And here are examples for what it would look like if you use `Van_Gogh_Horus` as
 
 Content          |  Target
 :-------------------------:|:-------------------------:
-![](./data/face2.jpeg)  |  ![](./outputs/Van_Gogh_Horus_face2_exp1.jpg)
+![](./data/face2.jpeg)  |  ![](./outputs/test/Van_Gogh_Horus_face2_exp1.jpg)
 
 Hopefully you will like it.
+
+## Have some fun
+
+#### After obtaining the authorization from 'victim', we generated the following image with alias from JOJO.
+
+Content          |  Crazy diamond  |   Golden experience    |   Star Platinum
+:--------------:|:--------------:|:--------------:|:--------------:
+![](./data/head.jpeg)  |  ![](./outputs/JOJO_special/Crazy_diamond_head_exp1.jpg)   ｜  ![](./outputs/JOJO_special/Golden_experience_head_exp1.jpg) |   ![](./outputs/JOJO_special/Star_Platinum_head_exp1.jpg)
