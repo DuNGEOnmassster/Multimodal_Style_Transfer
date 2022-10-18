@@ -51,5 +51,5 @@ Hopefully you will like it.
 
 |   Content     |   Crazy diamond   |   Golden experience   |   Star Platinum   |
 :---------------:|:-------------------:|:-----------------------:|:-------------------:
-![](./data/head.jpg){:height="100px" width="100px"}
+<img src="./data/head.jpg" width = "100" height = "100"/>
 
