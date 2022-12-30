@@ -3,13 +3,15 @@ Image Style Transfer with style comes from text description(CPU friendly).
 
 ## TODO ideas
 
-()  Style comes from text description
+(done)  Style comes from text description
 
 ()  Style comes from anothor image(classic style transfer)
 
 ()  Style comes from audio description
 
 ()  Real-time Transfer
+
+()  Explore how to use ChatGPT in this project
 
 ## Setup
 
