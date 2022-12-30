@@ -1,6 +1,16 @@
 # Multimodal_Style_Transfer
 Image Style Transfer with style comes from text description(CPU friendly).
 
+## TODO ideas
+
+()  Style comes from text description
+
+()  Style comes from anothor image(classic style transfer)
+
+()  Style comes from audio description
+
+()  Real-time Transfer
+
 ## Setup
 
 #### You are recommended to create a virtual envirnment with conda
