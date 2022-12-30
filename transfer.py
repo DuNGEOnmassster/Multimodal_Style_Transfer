@@ -16,11 +16,11 @@ from utils.MODELS import UNet
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--content_path', type=str, default="./data/face2.jpeg",
+    parser.add_argument('--content_path', type=str, default="./data/郑名哲.jpg",
                         help='Image resolution')
     parser.add_argument('--exp_name', type=str, default="exp1",
                         help='Image resolution')
-    parser.add_argument('--text', type=str, default="Fire",
+    parser.add_argument('--text', type=str, default="Van Gogh Sunflower",
                         help='Image resolution')
     parser.add_argument("--output_path", type=str, default="./outputs/",
                         help="Result storage")
@@ -43,7 +43,7 @@ def parse_args():
                         help='size of images')
     parser.add_argument('--img_height', type=int, default=512,
                         help='size of images')
-    parser.add_argument('--max_step', type=int, default=200,
+    parser.add_argument('--max_step', type=int, default=80,
                         help='Number of domains')
     parser.add_argument('--lr', type=float, default=5e-4,
                         help='Number of domains')
