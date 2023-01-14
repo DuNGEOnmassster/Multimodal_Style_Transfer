@@ -1,3 +1,4 @@
+import openai
 import torch
 import torch.nn
 import torch.nn.functional as F
@@ -16,7 +17,7 @@ from utils.MODELS import UNet
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--content_path', type=str, default="./data/郑名哲.jpg",
+    parser.add_argument('--content_path', type=str, default="./data/head.jpg",
                         help='Image resolution')
     parser.add_argument('--exp_name', type=str, default="exp1",
                         help='Image resolution')
@@ -167,8 +168,30 @@ def train():
         transforms.Resize(224)
     ])
 
+    with_ChatGPT = ""
+
+    if args.use_ChatGPT:
+        openai.api_key = "xxx"
+
+        with_ChatGPT = "ChatGPT"
+
+        response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt="Describe " + args.text,
+        temperature=0.3,
+        max_tokens=args.max_expand_text,
+        top_p=1.0,
+        frequency_penalty=0.0,
+        presence_penalty=0.0
+        )
+
+        print(response["choices"][0]["text"])
+
     with torch.no_grad():
-        template_text = compose_text_with_templates(args.text, imagenet_templates)
+        if args.use_ChatGPT:
+            template_text = compose_text_with_templates(response["choices"][0]["text"], imagenet_templates)
+        else:
+            template_text = compose_text_with_templates(args.text, imagenet_templates)
         tokens = CLIP.tokenize(template_text).to(device)
         text_features = clip_model.encode_text(tokens).detach()
         text_features = text_features.mean(axis=0, keepdim=True)
@@ -240,7 +263,7 @@ def train():
 
         # update target output in every 50 epoches
         if epoch % 50 == 0:
-            out_path = args.output_path + args.text + '_' + args.content_path.split("/")[-1].split(".")[0] + '_' + args.exp_name + '.jpg'
+            out_path = args.output_path + args.text + '_' + args.content_path.split("/")[-1].split(".")[0] + '_' + with_ChatGPT + "_" + args.exp_name + '.jpg'
             output_image = torch.clamp(target.clone(), 0, 1)
             output_image = adjust_contrast(output_image, 1.5)
             vutils.save_image(output_image, out_path, nrow=1, normalize=True)
