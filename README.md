@@ -11,7 +11,7 @@ Image Style Transfer with style comes from text description(CPU friendly).
 
 ()  Real-time Transfer
 
-()  Explore how to use ChatGPT in this project
+(done)  Expand text description with ChatGPT API
 
 ## Setup
 
