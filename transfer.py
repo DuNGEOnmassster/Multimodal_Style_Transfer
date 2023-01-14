@@ -21,7 +21,7 @@ def parse_args():
                         help='Image resolution')
     parser.add_argument('--exp_name', type=str, default="exp1",
                         help='Image resolution')
-    parser.add_argument('--text', type=str, default="Van Gogh Sunflower",
+    parser.add_argument('--text', type=str, default="Van Gogh Star Moon Night",
                         help='Image resolution')
     parser.add_argument("--output_path", type=str, default="./outputs/",
                         help="Result storage")
@@ -44,7 +44,7 @@ def parse_args():
                         help='size of images')
     parser.add_argument('--img_height', type=int, default=512,
                         help='size of images')
-    parser.add_argument('--max_step', type=int, default=80,
+    parser.add_argument('--max_step', type=int, default=120,
                         help='Number of domains')
     parser.add_argument('--lr', type=float, default=5e-4,
                         help='Number of domains')
@@ -131,6 +131,34 @@ def compose_text_with_templates(text: str, templates=imagenet_templates) -> list
     return [template.format(text) for template in templates]
 
 
+def expand_text(args):
+    if args.use_ChatGPT:
+        with open("./utils/config.txt", "r") as file:
+            line = file.readlines()
+        openai.api_key = line[0].split(sep=" = ")[-1]
+
+        with_ChatGPT = "ChatGPT_"
+
+        response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt="Describe " + args.text,
+        temperature=0.3,
+        max_tokens=args.max_expand_text,
+        top_p=1.0,
+        frequency_penalty=0.0,
+        presence_penalty=0.0
+        )
+
+        print(response["choices"][0]["text"])
+        new_text = response["choices"][0]["text"]
+
+    else:
+        with_ChatGPT = ""
+        new_text = args.text
+
+    return new_text, with_ChatGPT
+
+
 def train():
     # Initialize device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -168,30 +196,10 @@ def train():
         transforms.Resize(224)
     ])
 
-    with_ChatGPT = ""
-
-    if args.use_ChatGPT:
-        openai.api_key = "xxx"
-
-        with_ChatGPT = "ChatGPT"
-
-        response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt="Describe " + args.text,
-        temperature=0.3,
-        max_tokens=args.max_expand_text,
-        top_p=1.0,
-        frequency_penalty=0.0,
-        presence_penalty=0.0
-        )
-
-        print(response["choices"][0]["text"])
+    text, with_ChatGPT = expand_text(args)
 
     with torch.no_grad():
-        if args.use_ChatGPT:
-            template_text = compose_text_with_templates(response["choices"][0]["text"], imagenet_templates)
-        else:
-            template_text = compose_text_with_templates(args.text, imagenet_templates)
+        template_text = compose_text_with_templates(text, imagenet_templates)
         tokens = CLIP.tokenize(template_text).to(device)
         text_features = clip_model.encode_text(tokens).detach()
         text_features = text_features.mean(axis=0, keepdim=True)
@@ -263,7 +271,7 @@ def train():
 
         # update target output in every 50 epoches
         if epoch % 50 == 0:
-            out_path = args.output_path + args.text + '_' + args.content_path.split("/")[-1].split(".")[0] + '_' + with_ChatGPT + "_" + args.exp_name + '.jpg'
+            out_path = args.output_path + args.text + '_' + args.content_path.split("/")[-1].split(".")[0] + '_' + with_ChatGPT + args.exp_name + '.jpg'
             output_image = torch.clamp(target.clone(), 0, 1)
             output_image = adjust_contrast(output_image, 1.5)
             vutils.save_image(output_image, out_path, nrow=1, normalize=True)
