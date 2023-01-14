@@ -50,6 +50,11 @@ def parse_args():
     parser.add_argument('--thresh', type=float, default=0.7,
                         help='Number of domains')
 
+    parser.add_argument("--use_ChatGPT", type=bool, default=False,
+                        help="Declare whether to use ChatGPT to expand text description")
+    parser.add_argument("--max_expand_text", type=int, default=60,
+                        help="Declare the maximum of text description that expanded by ChatGPT")
+
     args = parser.parse_args()
     return args
 
