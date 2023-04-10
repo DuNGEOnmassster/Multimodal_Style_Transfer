@@ -17,11 +17,11 @@ from utils.MODELS import UNet
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--content_path', type=str, default="./data/head.jpg",
+    parser.add_argument('--content_path', type=str, default="./data/face2.jpeg",
                         help='Image resolution')
     parser.add_argument('--exp_name', type=str, default="exp1",
                         help='Image resolution')
-    parser.add_argument('--text', type=str, default="Van Gogh Star Moon Night",
+    parser.add_argument('--text', type=str, default="Van_Gogh_Horus",
                         help='Image resolution')
     parser.add_argument("--output_path", type=str, default="./outputs/",
                         help="Result storage")
